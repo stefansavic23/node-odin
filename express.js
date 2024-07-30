@@ -2,19 +2,13 @@ const express = require("express");
 
 const app = express();
 
-/**
- * GET /odin/messages?sort=date&direction=ascending will log
- * Params: { username: "odin" }
- * Query: { sort: "date", direction: "ascending" }
- *
- * GET /odin/messages?sort=date&sort=likes&direction=ascending will log
- * Params: { username: "odin" }
- * Query: { sort: ["date", "likes"], direction: "ascending" }
- */
+const myMiddleware = (req, res, next) => {
+  console.log("Middleware function called.");
 
-app.get("/:username/message", (req, res) => {
-  console.log("Params:", req.params);
-  console.log("Query:", req.query);
-});
+  //Call the next middleware/route handler
+  next();
+};
+
+app.use(myMiddleware);
 
 app.listen(8000);
