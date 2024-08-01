@@ -1,4 +1,4 @@
-const exports = require("express");
+const express = require("express");
 const userRouter = require("./routes/userRoutes");
 const path = require("path");
 
@@ -13,6 +13,15 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use((req, res, next) => {
   next();
+});
+
+const links = [
+  { href: "/", text: "Home" },
+  { href: "about", text: "About" },
+];
+
+app.get("/", (req, res) => {
+  res.render("index", { links: links });
 });
 
 app.use("/users", userRouter);
