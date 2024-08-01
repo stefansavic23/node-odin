@@ -9,6 +9,18 @@ const { body, validationResult } = require("express-validator");
     .isISO8601(), //Enforce a YYYY-MM-DD
 ];
 
+//asyncHandler lets us wrap async express routes to handle errors.
+asyncHandler(async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).render("index", {
+      errors: errors.array(),
+    });
+  }
+
+  res.redirect("/success");
+});
+
 const app = express();
 
 //This enables EJS as the view engine, and that our app should look for templates in the /views subdirectory.
