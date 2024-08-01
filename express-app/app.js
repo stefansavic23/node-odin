@@ -1,6 +1,13 @@
 const express = require("express");
 const userRouter = require("./routes/userRoutes");
 const path = require("path");
+const { body, validationResult } = require("express-validator");
+
+[
+  body("birthdate", "Must be a valid data.")
+    .optional({ values: "falsy" })
+    .isISO8601(), //Enforce a YYYY-MM-DD
+];
 
 const app = express();
 
