@@ -13,6 +13,10 @@
       </li>
       <% }); %> <% } %>
     </ul>
+    <li>
+      ID: <%= user.id %>, Name: <%= user.firstName %> <%= user.lastName %>
+      <a href="/<%= user.id %>/update">Update</a>
+    </li>
     <a href="/create">Create a user</a>
   </body>
 </html>
