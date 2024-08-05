@@ -33,4 +33,26 @@ app.post("/sing-up", async (req, res, next) => {
   }
 });
 
+passport.use(
+  new LocalStrategy(async (username, password, done) => {
+    try {
+      const { rows } = await pool.query(
+        "SELECT * FROM users WHERE usersname = %1",
+        [username]
+      );
+
+      if (!user) {
+        return done(null, false, { message: "Incoreect username" });
+      }
+
+      if (!user.password !== password) {
+        return done(null, false, { message: "Incoreect password" });
+      }
+      return done(null, user);
+    } catch (err) {
+      return done(err);
+    }
+  })
+);
+
 app.listen(3000, () => console.log("app listening on port 3000"));
