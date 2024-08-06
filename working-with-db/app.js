@@ -3,6 +3,7 @@ const express = require("express");
 const session = require("express-session");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
+const bcrypt = require("bcryptjs");
 
 const pool = new Pool({
   // add your configuration
@@ -28,6 +29,17 @@ app.get("/", (req, res) => res.render("index", { user: req.user }));
 app.get("/sign", (req, res) => res.render("sign-up-form"));
 
 app.post("/sing-up", async (req, res, next) => {
+  bcrypt.hash(req.body.password, 10, async (err, hashedPassword) => {
+    //if err, do something
+    //otherwise, store hashed in DB
+    //bcrypt.compare() function to validate the password input
+    const match = await bcrypt.compare(password, user.password);
+    if (!match) {
+      // passwords do not match!
+      return done(null, false, { message: "Incorrect password" });
+    }
+  });
+
   try {
     await pool.query("INSERT INTO users(username, password) VALUES ($1, $2)", [
       req.body.username,
