@@ -17,7 +17,12 @@ app.use(passport.session());
 //Preaparing application to handle data forms and access it through the req.body object
 app.use(express.urlencoded({ extended: false }));
 
-app.get("/", (req, res) => res.render("index"));
+app.use((req, res, next) => {
+  res.locals.currentUser = req.user;
+  next();
+});
+
+app.get("/", (req, res) => res.render("index", { user: req.user }));
 
 app.get("/sign", (req, res) => res.render("sign-up-form"));
 
@@ -32,6 +37,20 @@ app.post("/sing-up", async (req, res, next) => {
     return next(err);
   }
 });
+
+app.get("/log-out", (req, res, next) => {
+  req.logout((err) => {
+    if (err) {
+      return next(err);
+    }
+    res.redirect("/");
+  });
+});
+
+app.post(
+  "/log-in",
+  passport.authenticate("local", { successRedirect: "/", failureRedirect: "/" })
+);
 
 passport.use(
   new LocalStrategy(async (username, password, done) => {
