@@ -18,6 +18,7 @@ app.use(passport.session());
 app.use(express.urlencoded({ extended: false }));
 
 app.use((req, res, next) => {
+  // res.locals is a special place to store information that you want to use when making your webpage
   res.locals.currentUser = req.user;
   next();
 });
